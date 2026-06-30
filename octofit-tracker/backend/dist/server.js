@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+exports.createApp = createApp;
 const express_1 = __importDefault(require("express"));
 const models_1 = require("./models");
-const app = (0, express_1.default)();
 const DEFAULT_PORT = 8000;
 const PORT = Number(process.env.PORT || DEFAULT_PORT);
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/octofit_db';
@@ -15,42 +16,52 @@ function getApiBaseUrl() {
     }
     return `http://localhost:${DEFAULT_PORT}`;
 }
-app.use(express_1.default.json());
-app.get('/api/health', (_req, res) => {
-    res.json({
-        status: 'ok',
-        message: 'OctoFit Tracker API is running',
-        apiUrl: getApiBaseUrl(),
+function createApp(dependencies = {}) {
+    const app = (0, express_1.default)();
+    const userModel = dependencies.userModel || models_1.User;
+    const teamModel = dependencies.teamModel || models_1.Team;
+    const activityModel = dependencies.activityModel || models_1.Activity;
+    const leaderboardModel = dependencies.leaderboardModel || models_1.LeaderboardEntry;
+    const workoutModel = dependencies.workoutModel || models_1.Workout;
+    app.use(express_1.default.json());
+    app.get('/api/health', (_req, res) => {
+        res.json({
+            status: 'ok',
+            message: 'OctoFit Tracker API is running',
+            apiUrl: getApiBaseUrl(),
+        });
     });
-});
-app.get('/api/config', (_req, res) => {
-    res.json({
-        apiUrl: getApiBaseUrl(),
-        port: PORT,
+    app.get('/api/config', (_req, res) => {
+        res.json({
+            apiUrl: getApiBaseUrl(),
+            port: PORT,
+        });
     });
-});
-app.get(['/api/users', '/api/users/'], async (_req, res) => {
-    const users = await models_1.User.find({}).lean();
-    res.json(users);
-});
-app.get(['/api/teams', '/api/teams/'], async (_req, res) => {
-    const teams = await models_1.Team.find({}).lean();
-    res.json(teams);
-});
-app.get(['/api/activities', '/api/activities/'], async (_req, res) => {
-    const activities = await models_1.Activity.find({}).populate('userId', 'name').lean();
-    res.json(activities);
-});
-app.get(['/api/leaderboard', '/api/leaderboard/'], async (_req, res) => {
-    const leaderboard = await models_1.LeaderboardEntry.find({}).lean();
-    res.json(leaderboard);
-});
-app.get(['/api/workouts', '/api/workouts/'], async (_req, res) => {
-    const workouts = await models_1.Workout.find({}).lean();
-    res.json(workouts);
-});
+    app.get(['/api/users', '/api/users/'], async (_req, res) => {
+        const users = await userModel.find({});
+        res.json(users);
+    });
+    app.get(['/api/teams', '/api/teams/'], async (_req, res) => {
+        const teams = await teamModel.find({});
+        res.json(teams);
+    });
+    app.get(['/api/activities', '/api/activities/'], async (_req, res) => {
+        const activities = await activityModel.find({});
+        res.json(activities);
+    });
+    app.get(['/api/leaderboard', '/api/leaderboard/'], async (_req, res) => {
+        const leaderboard = await leaderboardModel.find({});
+        res.json(leaderboard);
+    });
+    app.get(['/api/workouts', '/api/workouts/'], async (_req, res) => {
+        const workouts = await workoutModel.find({});
+        res.json(workouts);
+    });
+    return app;
+}
 async function startServer() {
     try {
+        const app = createApp();
         await (0, models_1.connectToDatabase)(MONGO_URI);
         console.log('Connected to MongoDB at', MONGO_URI);
         const userCount = await models_1.User.countDocuments();
@@ -68,4 +79,7 @@ async function startServer() {
         process.exit(1);
     }
 }
-startServer();
+if (require.main === module) {
+    startServer();
+}
+exports.app = createApp();
