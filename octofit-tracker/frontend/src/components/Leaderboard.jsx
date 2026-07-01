@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 
-function getApiUrl(resource) {
+function getLeaderboardUrl() {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
 
   if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
+    return `https://${codespaceName}-8000.app.github.dev/api/leaderboard/`;
   }
 
-  return `http://localhost:8000/api/${resource}/`;
+  return `http://localhost:8000/api/leaderboard/`;
 }
 
 function Leaderboard() {
-  const [leaders, setLeaders] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const url = getApiUrl('leaderboard');
+    const url = getLeaderboardUrl();
 
     fetch(url)
       .then(async (response) => {
@@ -36,7 +36,7 @@ function Leaderboard() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Leaderboard</h2>
         <p className="text-muted">See who is leading the fitness challenge.</p>
-        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('leaderboard')}</code></p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getLeaderboardUrl()}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

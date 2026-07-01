@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-function getApiUrl(resource) {
+function getUsersUrl() {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
 
   if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
+    return `https://${codespaceName}-8000.app.github.dev/api/users/`;
   }
 
-  return `http://localhost:8000/api/${resource}/`;
+  return `http://localhost:8000/api/users/`;
 }
 
 function Users() {
@@ -15,7 +15,7 @@ function Users() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const url = getApiUrl('users');
+    const url = getUsersUrl();
 
     fetch(url)
       .then(async (response) => {
@@ -36,7 +36,7 @@ function Users() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Users</h2>
         <p className="text-muted">Browse the active members in OctoFit Tracker.</p>
-        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('users')}</code></p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getUsersUrl()}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-function getApiUrl(resource) {
+function getActivitiesUrl() {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
 
   if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
+    return `https://${codespaceName}-8000.app.github.dev/api/activities/`;
   }
 
-  return `http://localhost:8000/api/${resource}/`;
+  return `http://localhost:8000/api/activities/`;
 }
 
 function Activities() {
@@ -15,7 +15,7 @@ function Activities() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const url = getApiUrl('activities');
+    const url = getActivitiesUrl();
 
     fetch(url)
       .then(async (response) => {
@@ -36,7 +36,7 @@ function Activities() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Recent activities</h2>
         <p className="text-muted">Track the latest logs from your community.</p>
-        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('activities')}</code></p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getActivitiesUrl()}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

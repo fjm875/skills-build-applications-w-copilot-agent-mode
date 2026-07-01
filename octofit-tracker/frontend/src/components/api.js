@@ -24,6 +24,26 @@ function extractItems(payload) {
   return [];
 }
 
+export function getActivitiesUrl() {
+  return `${getBaseApiUrl()}/activities/`;
+}
+
+export function getLeaderboardUrl() {
+  return `${getBaseApiUrl()}/leaderboard/`;
+}
+
+export function getTeamsUrl() {
+  return `${getBaseApiUrl()}/teams/`;
+}
+
+export function getUsersUrl() {
+  return `${getBaseApiUrl()}/users/`;
+}
+
+export function getWorkoutsUrl() {
+  return `${getBaseApiUrl()}/workouts/`;
+}
+
 export async function fetchCollection(url, resourceName = 'collection') {
   let response;
 

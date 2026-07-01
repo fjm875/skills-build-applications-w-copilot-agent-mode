@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-function getApiUrl(resource) {
+function getWorkoutsUrl() {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
 
   if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
+    return `https://${codespaceName}-8000.app.github.dev/api/workouts/`;
   }
 
-  return `http://localhost:8000/api/${resource}/`;
+  return `http://localhost:8000/api/workouts/`;
 }
 
 function Workouts() {
@@ -15,7 +15,7 @@ function Workouts() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const url = getApiUrl('workouts');
+    const url = getWorkoutsUrl();
 
     fetch(url)
       .then(async (response) => {
@@ -36,7 +36,7 @@ function Workouts() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Suggested workouts</h2>
         <p className="text-muted">Choose a plan that fits your current routine.</p>
-        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('workouts')}</code></p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getWorkoutsUrl()}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

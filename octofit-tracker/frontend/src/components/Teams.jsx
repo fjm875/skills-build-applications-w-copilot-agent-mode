@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-function getApiUrl(resource) {
+function getTeamsUrl() {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
 
   if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
+    return `https://${codespaceName}-8000.app.github.dev/api/teams/`;
   }
 
-  return `http://localhost:8000/api/${resource}/`;
+  return `http://localhost:8000/api/teams/`;
 }
 
 function Teams() {
@@ -15,7 +15,7 @@ function Teams() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const url = getApiUrl('teams');
+    const url = getTeamsUrl();
 
     fetch(url)
       .then(async (response) => {
@@ -36,7 +36,7 @@ function Teams() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Teams</h2>
         <p className="text-muted">Coordinate squads, captains, and goals.</p>
-        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('teams')}</code></p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getTeamsUrl()}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (
