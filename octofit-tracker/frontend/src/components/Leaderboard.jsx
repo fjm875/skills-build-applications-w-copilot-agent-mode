@@ -1,12 +1,32 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection, getApiUrl } from './api';
+
+function getApiUrl(resource) {
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+
+  if (codespaceName) {
+    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
+  }
+
+  return `http://localhost:8000/api/${resource}/`;
+}
 
 function Leaderboard() {
   const [leaders, setLeaders] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchCollection('leaderboard')
+    const url = getApiUrl('leaderboard');
+
+    fetch(url)
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorText = await response.text().catch(() => '');
+          throw new Error(
+            `Unable to load leaderboard from ${url}: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`
+          );
+        }
+        return response.json();
+      })
       .then(setLeaders)
       .catch(() => setError('Unable to load leaderboard right now.'));
   }, []);

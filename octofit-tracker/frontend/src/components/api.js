@@ -1,13 +1,3 @@
-export function getApiUrl(resource) {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
-
-  if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api/${resource}/`;
-  }
-
-  return `http://localhost:8000/api/${resource}/`;
-}
-
 function extractItems(payload) {
   if (Array.isArray(payload)) {
     return payload;
@@ -34,20 +24,19 @@ function extractItems(payload) {
   return [];
 }
 
-export async function fetchCollection(resource) {
-  const url = getApiUrl(resource);
+export async function fetchCollection(url, resourceName = 'collection') {
   let response;
 
   try {
     response = await fetch(url);
   } catch (error) {
-    throw new Error(`Unable to load ${resource} from ${url}: ${error?.message ?? 'network error'}`);
+    throw new Error(`Unable to load ${resourceName} from ${url}: ${error?.message ?? 'network error'}`);
   }
 
   if (!response.ok) {
     const errorText = await response.text().catch(() => '');
     throw new Error(
-      `Unable to load ${resource} from ${url}: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`
+      `Unable to load ${resourceName} from ${url}: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`
     );
   }
 
