@@ -7,9 +7,9 @@ exports.app = void 0;
 exports.createApp = createApp;
 const express_1 = __importDefault(require("express"));
 const models_1 = require("./models");
+const database_1 = require("./config/database");
 const DEFAULT_PORT = 8000;
 const PORT = Number(process.env.PORT || DEFAULT_PORT);
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/octofit_db';
 function getApiBaseUrl() {
     if (process.env.CODESPACE_NAME) {
         return `https://${process.env.CODESPACE_NAME}-8000.app.github.dev`;
@@ -62,8 +62,8 @@ function createApp(dependencies = {}) {
 async function startServer() {
     try {
         const app = createApp();
-        await (0, models_1.connectToDatabase)(MONGO_URI);
-        console.log('Connected to MongoDB at', MONGO_URI);
+        await (0, database_1.connectToDatabase)(database_1.MONGO_URI);
+        console.log('Connected to MongoDB at', database_1.MONGO_URI);
         const userCount = await models_1.User.countDocuments();
         if (userCount === 0) {
             await (0, models_1.seedDatabase)();

@@ -1,9 +1,9 @@
 import express from 'express';
-import { Activity, connectToDatabase, LeaderboardEntry, seedDatabase, Team, User, Workout } from './models';
+import { Activity, LeaderboardEntry, seedDatabase, Team, User, Workout } from './models';
+import { connectToDatabase, MONGO_URI } from './config/database';
 
 const DEFAULT_PORT = 8000;
 const PORT = Number(process.env.PORT || DEFAULT_PORT);
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/octofit_db';
 
 function getApiBaseUrl(): string {
   if (process.env.CODESPACE_NAME) {
