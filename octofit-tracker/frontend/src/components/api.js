@@ -35,10 +35,20 @@ function extractItems(payload) {
 }
 
 export async function fetchCollection(resource) {
-  const response = await fetch(getApiUrl(resource));
+  const url = getApiUrl(resource);
+  let response;
+
+  try {
+    response = await fetch(url);
+  } catch (error) {
+    throw new Error(`Unable to load ${resource} from ${url}: ${error?.message ?? 'network error'}`);
+  }
 
   if (!response.ok) {
-    throw new Error(`Unable to load ${resource}`);
+    const errorText = await response.text().catch(() => '');
+    throw new Error(
+      `Unable to load ${resource} from ${url}: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`
+    );
   }
 
   const payload = await response.json();

@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { Activity, LeaderboardEntry, seedDatabase, Team, User, Workout } from './models';
 import { connectToDatabase, MONGO_URI } from './config/database';
@@ -30,6 +31,7 @@ export function createApp(dependencies: AppDependencies = {}): express.Express {
   const leaderboardModel = dependencies.leaderboardModel || LeaderboardEntry;
   const workoutModel = dependencies.workoutModel || Workout;
 
+  app.use(cors());
   app.use(express.json());
 
   app.get('/api/health', (_req, res) => {

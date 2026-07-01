@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './api';
+import { fetchCollection, getApiUrl } from './api';
 
 function Workouts() {
   const [workouts, setWorkouts] = useState([]);
@@ -16,6 +16,7 @@ function Workouts() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Suggested workouts</h2>
         <p className="text-muted">Choose a plan that fits your current routine.</p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('workouts')}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

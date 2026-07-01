@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './api';
+import { fetchCollection, getApiUrl } from './api';
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -16,6 +16,7 @@ function Users() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Users</h2>
         <p className="text-muted">Browse the active members in OctoFit Tracker.</p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('users')}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

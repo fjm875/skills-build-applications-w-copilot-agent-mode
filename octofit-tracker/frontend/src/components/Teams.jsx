@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './api';
+import { fetchCollection, getApiUrl } from './api';
 
 function Teams() {
   const [teams, setTeams] = useState([]);
@@ -16,6 +16,7 @@ function Teams() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Teams</h2>
         <p className="text-muted">Coordinate squads, captains, and goals.</p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('teams')}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (

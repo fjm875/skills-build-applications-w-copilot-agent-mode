@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './api';
+import { fetchCollection, getApiUrl } from './api';
 
 function Leaderboard() {
   const [leaders, setLeaders] = useState([]);
@@ -16,6 +16,7 @@ function Leaderboard() {
       <div className="card-body">
         <h2 className="h4 fw-semibold">Leaderboard</h2>
         <p className="text-muted">See who is leading the fitness challenge.</p>
+        <p className="small text-muted mb-3">Debug URL: <code>{getApiUrl('leaderboard')}</code></p>
         {error ? (
           <div className="alert alert-warning">{error}</div>
         ) : (
