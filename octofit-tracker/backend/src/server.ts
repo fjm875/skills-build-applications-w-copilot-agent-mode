@@ -13,6 +13,7 @@ function getApiBaseUrl(): string {
   return `http://localhost:${DEFAULT_PORT}`;
 }
 
+// Backend application entry point for the OctoFit API.
 interface AppDependencies {
   userModel?: typeof User;
   teamModel?: typeof Team;
